@@ -1,5 +1,6 @@
 using Ocelot.Configuration.File;
 using Ocelot.LoadBalancer.LoadBalancers;
+using System;
 using System.Linq;
 
 namespace Ocelot.Configuration.Creator
@@ -13,7 +14,7 @@ namespace Ocelot.Configuration.Creator
                 return $"{nameof(CookieStickySessions)}:{fileReRoute.LoadBalancerOptions.Key}";
             }
 
-            return $"{fileReRoute.UpstreamPathTemplate}|{string.Join(",", fileReRoute.UpstreamHttpMethod)}|{string.Join(",", fileReRoute.DownstreamHostAndPorts.Select(x => $"{x.Host}:{x.Port}"))}";
+            return $"{fileReRoute.UpstreamPathTemplate}|{string.Join(",", fileReRoute.UpstreamHttpMethod)}|{string.Join(",", fileReRoute.DownstreamHostAndPorts.Select(x => $"{x.Host}:{(x.Port == 80 ? "" : Convert.ToString(x.Port))}"))}";
         }
 
         private bool IsStickySession(FileReRoute fileReRoute)

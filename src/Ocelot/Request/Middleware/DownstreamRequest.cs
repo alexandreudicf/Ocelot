@@ -44,7 +44,7 @@ namespace Ocelot.Request.Middleware
         {
             var uriBuilder = new UriBuilder
             {
-                Port = Port,
+                Port = Port == 80 || Port == 443 ? -1 : Port,
                 Host = Host,
                 Path = AbsolutePath,
                 Query = RemoveLeadingQuestionMark(Query),
