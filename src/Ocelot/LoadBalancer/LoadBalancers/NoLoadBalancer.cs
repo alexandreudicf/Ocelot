@@ -27,7 +27,15 @@ namespace Ocelot.LoadBalancer.LoadBalancers
             }
 
             var service = await Task.FromResult(services.FirstOrDefault());
-            return new OkResponse<ServiceHostAndPort>(service.HostAndPort);
+            var my_service = new Service("", new ServiceHostAndPort(downstreamContext.DownstreamReRoute.DownstreamAddresses.FirstOrDefault().Host, downstreamContext.DownstreamReRoute.DownstreamAddresses.FirstOrDefault().Port), "", "", Enumerable.Empty<string>());
+            if (service.HostAndPort.DownstreamHost == my_service.HostAndPort.DownstreamHost && service.HostAndPort.DownstreamPort == my_service.HostAndPort.DownstreamPort)
+            {
+                return new OkResponse<ServiceHostAndPort>(service.HostAndPort);
+            }
+            else
+            {
+                return new OkResponse<ServiceHostAndPort>(my_service.HostAndPort);
+            }
         }
 
         public void Release(ServiceHostAndPort hostAndPort)
