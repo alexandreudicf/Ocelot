@@ -42,13 +42,11 @@ namespace Ocelot.DependencyInjection
 
             const string subConfigPattern = @"^ocelot\.(.*?)\.json$";
 
-            string excludeConfigName = env?.EnvironmentName != null ? $"ocelot.{env.EnvironmentName}.json" : string.Empty;
-
             var reg = new Regex(subConfigPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
             var files = new DirectoryInfo(folder)
                 .EnumerateFiles()
-                .Where(fi => reg.IsMatch(fi.Name) && (fi.Name != excludeConfigName))
+                .Where(fi => reg.IsMatch(fi.Name))
                 .ToList();
 
             var fileConfiguration = new FileConfiguration();
